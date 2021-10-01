@@ -124,18 +124,24 @@ func (r *FolderListRequest) ToQuery(session *PremiumizeSession) string {
 		result["id"] = []string{r.ID}
 	}
 	if r.BreadCrumbs {
-		result["includeBreadCrumbs"] = []string{strconv.FormatBool(r.BreadCrumbs)}
+		result["includebreadcrumbs"] = []string{strconv.FormatBool(r.BreadCrumbs)}
 	}
 	result = authParams(session, result)
 	return result.Encode()
 }
 
+type BreadCrumb struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
 type FolderListResponse struct {
 	PremiumizeAPIResponse
-	Content  []*PremiumizeItem `json:"content"`
-	Name     string            `json:"name"`
-	ParentID string            `json:"parent_id"`
-	FolderID string            `json:"folder_id"`
+	Content     []*PremiumizeItem `json:"content"`
+	Name        string            `json:"name"`
+	ParentID    string            `json:"parent_id"`
+	FolderID    string            `json:"folder_id"`
+	BreadCrumbs []*BreadCrumb     `json:"breadcrumbs,omitempty"`
 }
 
 type FolderCreateRequest struct {
