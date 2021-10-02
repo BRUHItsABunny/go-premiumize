@@ -120,12 +120,13 @@ func main() {
 		ticker := time.NewTicker(time.Duration(programParams.ProgressInterval) * time.Second)
 		for {
 			if shouldStop {
+				fmt.Println("Stopping workers and exiting loop")
 				stopChan <- true // Trigger workers exit
 				break
 			}
 			select {
 			case <-ticker.C: // Catch empty queue (eventually...)
-				fmt.Println(fmt.Sprintf("Ticker: %d downloaded out of %d", downloaded, downloading))
+				fmt.Println(fmt.Sprintf("[%s] Ticker: %d downloaded out of %d", time.Now().String(), downloaded, downloading))
 				shouldStop = int(downloaded) == downloading
 				break
 			case <-sysChan: // Catch ctrl+C
@@ -192,6 +193,7 @@ func Download(wg *sync.WaitGroup, stopper chan bool, queue *queue.Queue, counter
 				} else {
 					fmt.Println("req err: ", err)
 				}
+				fmt.Println("Done downloading " + item.Item.Name)
 				atomic.AddInt32(counter, 1) // Count but no freeze
 			}
 			break
