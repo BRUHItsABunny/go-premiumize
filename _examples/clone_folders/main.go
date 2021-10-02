@@ -20,7 +20,7 @@ import (
 )
 
 // Sample application that I will end up actually using
-// go run main.go -apiKey APIKEY -folder BUNBUNBUN -recursion -threads 6
+// go run main.go -apikey APIKEY -folder BUNBUNBUN -recursion -threads 6
 type CloneParameters struct {
 	APIKey           string
 	DownloadThreads  int
@@ -37,7 +37,7 @@ type DownloadableItem struct {
 func main() {
 	// Parse parameters
 	programParams := new(CloneParameters)
-	flag.StringVar(&programParams.APIKey, "apiKey", "", "This is our APIKey - not needed, if missing it will authenticate via device code")
+	flag.StringVar(&programParams.APIKey, "apikey", "", "This is our APIKey - not needed, if missing it will authenticate via device code")
 	flag.IntVar(&programParams.DownloadThreads, "threads", 1, "This is how many files we download in parallel (min=1, max=6)")
 	flag.StringVar(&programParams.Folder, "folder", "", "This is the folder we will start crawling in")
 	flag.BoolVar(&programParams.Recursive, "recursion", false, "This controls if we want all files inside all folders of the folder you selected or just all files in the folder you selected")
@@ -51,7 +51,7 @@ func main() {
 		session = &api.PremiumizeSession{SessionType: "apikey", AuthToken: programParams.APIKey}
 	}
 	hClient := gokhttp.GetHTTPDownloadClient(gokhttp.DefaultGOKHTTPOptions) // A client with sufficient timeouts for downloading
-	// _ = hClient.SetProxy("http://127.0.0.1:8888")
+	_ = hClient.SetProxy("http://127.0.0.1:8888")
 	pClient := client.NewPremiumizeClient(session, hClient.Client)
 	ctx := context.Background()
 
@@ -77,7 +77,7 @@ func main() {
 	if strings.HasPrefix(programParams.Folder, "My Files/") || strings.HasPrefix(programParams.Folder, "\\") {
 		offset = 1
 	}
-	crumbs := strings.Split(programParams.Folder, "//")[offset:]
+	crumbs := strings.Split(programParams.Folder, "/")[offset:]
 	folderID := "" // Start in root
 	lastCrumb := len(crumbs) - 1
 	for i, crumb := range crumbs {
