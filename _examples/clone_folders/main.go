@@ -156,7 +156,8 @@ func Download(id int, wg *sync.WaitGroup, stopper chan bool, queue *queue.Queue,
 	shouldStop := false
 	dir := ""
 	var item *DownloadableItem
-	ticker := time.NewTicker(time.Duration(5) * time.Second)
+	ticker := time.NewTicker(time.Duration(1) * time.Second)
+	time.Sleep(5 * time.Second)
 	for {
 		if shouldStop {
 			fmt.Println(fmt.Sprintf("[%d] Worker exiting", id))
