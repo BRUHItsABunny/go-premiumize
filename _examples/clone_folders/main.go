@@ -27,6 +27,7 @@ type CloneParameters struct {
 	Folder           string
 	Recursive        bool
 	ProgressInterval int
+	Proxy            string
 }
 
 type DownloadableItem struct {
@@ -42,6 +43,7 @@ func main() {
 	flag.StringVar(&programParams.Folder, "folder", "", "This is the folder we will start crawling in")
 	flag.BoolVar(&programParams.Recursive, "recursion", false, "This controls if we want all files inside all folders of the folder you selected or just all files in the folder you selected")
 	flag.IntVar(&programParams.ProgressInterval, "pinterval", 5, "This is how many seconds we wait in between each progress print")
+	flag.StringVar(&programParams.Proxy, "proxy", "", "This argument is for proxying this program (format: proto://ip:port)")
 
 	flag.Parse()
 
@@ -51,7 +53,12 @@ func main() {
 		session = &api.PremiumizeSession{SessionType: "apikey", AuthToken: programParams.APIKey}
 	}
 	hClient := gokhttp.GetHTTPDownloadClient(gokhttp.DefaultGOKHTTPOptions) // A client with sufficient timeouts for downloading
-	// _ = hClient.SetProxy("http://127.0.0.1:8888")
+	if len(programParams.Proxy) > 0 {
+		err := hClient.SetProxy(programParams.Proxy)
+		if err != nil {
+			panic(err)
+		}
+	}
 	pClient := client.NewPremiumizeClient(session, hClient.Client)
 	ctx := context.Background()
 
