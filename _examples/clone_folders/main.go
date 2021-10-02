@@ -51,7 +51,7 @@ func main() {
 		session = &api.PremiumizeSession{SessionType: "apikey", AuthToken: programParams.APIKey}
 	}
 	hClient := gokhttp.GetHTTPDownloadClient(gokhttp.DefaultGOKHTTPOptions) // A client with sufficient timeouts for downloading
-	_ = hClient.SetProxy("http://127.0.0.1:8888")
+	// _ = hClient.SetProxy("http://127.0.0.1:8888")
 	pClient := client.NewPremiumizeClient(session, hClient.Client)
 	ctx := context.Background()
 
