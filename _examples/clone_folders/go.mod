@@ -2,7 +2,9 @@ module github.com/BRUHItsABunny/go-premiumize/_examples/clone_folders
 
 go 1.17
 
-replace github.com/BRUHItsABunny/go-premiumize => ../../
+replace (
+	github.com/BRUHItsABunny/go-premiumize => ../../
+)
 
 require (
 	github.com/BRUHItsABunny/gOkHttp v0.0.6
